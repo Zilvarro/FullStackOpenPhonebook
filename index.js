@@ -1,6 +1,10 @@
+const morgan = require('morgan')
+morgan.token('body', (req, res) => JSON.stringify(req.body) )
+
 const express = require('express')
 const app = express()
 app.use(express.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
     { 
@@ -69,7 +73,7 @@ app.post('/api/persons', (request, response) => {
     if (persons.some(person => person.name === body.name)){
         return response.status(400).json({error: 'Person already added!'})
     }
-    
+
     const person = {
         id: id,
         name: body.name,
